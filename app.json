@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "condo-app-ui",
+    "slug": "condo-app-ui",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "condo-app-ui"
+}
