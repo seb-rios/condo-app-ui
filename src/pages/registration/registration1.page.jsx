@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { UserContext } from "../../context/user.content";
 
 const styles = StyleSheet.create({
   container: {
@@ -59,21 +61,28 @@ const styles = StyleSheet.create({
     color: "#5db075",
   },
   optionContainer: {
+    width: "100%",
+    display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: 20, // Consistent padding for side spacing.
   },
 });
 
 const RegistrationPage1 = ({ onNext }) => {
-  const [userData, setUserData] = useState({});
-  const { name, email, phone, nameError, emailError, phoneError } = userData;
+  const { userData, setUserData } = useContext(UserContext);
+  const [userError, setUserErrors] = useState({});
+  const { name, email, phone } = userData;
+  const { nameError, emailError, phoneError } = userError;
+  const navigation = useNavigation();
 
   const handleNameChange = (text) => {
     let error = "";
     if (text.length > 20) {
       error = "Nombre: No más de 20 letras";
     }
-    setUserData({ ...userData, name: text, nameError: error });
+    setUserData({ ...userData, name: text });
+    setUserErrors({ ...userError, nameError: error });
   };
 
   const handleEmailChange = (text) => {
@@ -81,7 +90,8 @@ const RegistrationPage1 = ({ onNext }) => {
     if (!isValidEmail(text)) {
       error = "Dirección de correo electrónico inválida";
     }
-    setUserData({ ...userData, email: text, emailError: error });
+    setUserData({ ...userData, email: text });
+    setUserErrors({ ...userError, emailError: error });
   };
 
   const handlePhoneChange = (text) => {
@@ -89,7 +99,8 @@ const RegistrationPage1 = ({ onNext }) => {
     if (!isValidPhone(text)) {
       error = "Número de teléfono inválido";
     }
-    setUserData({ ...userData, phone: text, phoneError: error });
+    setUserData({ ...userData, phone: text });
+    setUserErrors({ ...userError, phoneError: error });
   };
 
   const isValidEmail = (email) => {
@@ -105,10 +116,8 @@ const RegistrationPage1 = ({ onNext }) => {
   };
 
   const isFormValid = () => {
-    return !nameError && !emailError && !phoneError;
+    return name && email && phone && !nameError && !emailError && !phoneError;
   };
-
-  console.log(userData);
 
   return (
     <View style={styles.container}>
@@ -149,7 +158,9 @@ const RegistrationPage1 = ({ onNext }) => {
             <Text style={styles.buttonText}>Siguiente</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.loginLink}>¿Ya tienes cuenta?</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <Text style={styles.loginLink}>¿Ya tienes cuenta?</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

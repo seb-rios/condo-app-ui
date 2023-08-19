@@ -1,13 +1,18 @@
-import { StatusBar } from "expo-status-bar";
+import { enableScreens } from "react-native-screens";
+enableScreens();
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import RegistrationFlow from "./src/pages/registration/registration-flow.page";
+import { StyleSheet, View } from "react-native";
+import AppStack from "./src/routes/index.routes";
+
+import { UserProvider } from "./src/context/user.content";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <RegistrationFlow />
-    </View>
+    <UserProvider>
+      {/* <View style={styles.container}> */}
+      <AppStack />
+      {/* </View> */}
+    </UserProvider>
   );
 }
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { UserContext } from "../../context/user.content";
 
 const styles = StyleSheet.create({
   container: {
@@ -64,27 +65,33 @@ const styles = StyleSheet.create({
     color: "#5db075",
   },
   optionContainer: {
+    width: "100%",
+    display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: 20, // Consistent padding for side spacing. // Consistent padding for side spacing.
   },
 });
 
-const RegistrationPage2 = ({ loginData, onNext, onBack }) => {
-  const [userData, setUserData] = useState({ ...loginData });
-  const { houseInfo, houseInfoError } = userData;
+const RegistrationPage2 = ({ onNext, onBack }) => {
+  const { userData, setUserData } = useContext(UserContext);
+  const [userError, setUserErrors] = useState({});
+  const { houseInfo } = userData;
+  const { houseInfoError } = userError;
 
   const handleHouseInfo = (text) => {
     let error = "";
     if (text.length > 40) {
       error = "No más de 40 letras";
     }
-    setUserData({ ...userData, houseInfo: text, houseInfoError: error });
+    setUserData({ ...userData, houseInfo: text });
+    setUserErrors({ ...userError, houseInfoError: error });
   };
 
   const isFormValid = () => {
-    return !houseInfoError;
+    return houseInfo && !houseInfoError;
   };
-  console.log(userData);
+
   return (
     <View style={styles.container}>
       <View id="title-container">
@@ -108,14 +115,14 @@ const RegistrationPage2 = ({ loginData, onNext, onBack }) => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.button, !isFormValid() && { opacity: 0.5 }]}
-            onPress={isFormValid() ? onNext : onBack}
+            onPress={isFormValid() ? onNext : null}
             disabled={!isFormValid()}
           >
             <Text style={styles.buttonText}>Siguiente</Text>
           </TouchableOpacity>
         </View>
         <TouchableOpacity onPress={onBack}>
-          <Text style={styles.loginLink}>Volver?</Text>
+          <Text style={styles.loginLink}>Volver</Text>
         </TouchableOpacity>
       </View>
     </View>

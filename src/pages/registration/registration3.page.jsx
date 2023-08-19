@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { UserContext } from "../../context/user.content";
+import SuccessMessage from "../../components/animations/successMsg.component";
 
 const styles = StyleSheet.create({
   container: {
@@ -59,15 +61,30 @@ const styles = StyleSheet.create({
     color: "#5db075",
   },
   optionContainer: {
+    width: "100%",
+    display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  visibilityToggle: {
+    position: "absolute",
+    right: 10,
+    height: "100%",
+    justifyContent: "center",
+  },
+  visibilityText: {
+    color: "#5db075",
   },
 });
 
-const RegistrationPage3 = ({ loginData, onNext, onBack }) => {
-  const [userData, setUserData] = useState({ ...loginData });
-  const { password, confirmPassword, passwordError, confirmPasswordError } =
-    userData;
+const RegistrationPage3 = ({ onNext, onBack }) => {
+  const { userData, setUserData } = useContext(UserContext);
+  const [userError, setUserErrors] = useState({});
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const { password, confirmPassword } = userData;
+  const { passwordError, confirmPasswordError } = userError;
 
   const handlePasswordChange = (text) => {
     let error = "";
@@ -78,7 +95,8 @@ const RegistrationPage3 = ({ loginData, onNext, onBack }) => {
     if (text.length < 8) {
       error = "La contraseña debe tener al menos 8 caracteres.";
     }
-    setUserData({ ...userData, password: text, passwordError: error });
+    setUserData({ ...userData, password: text });
+    setUserErrors({ ...userError, passwordError: error });
   };
 
   const handleConfirmPasswordChange = (text) => {
@@ -89,51 +107,85 @@ const RegistrationPage3 = ({ loginData, onNext, onBack }) => {
     setUserData({
       ...userData,
       confirmPassword: text,
-      confirmPasswordError: error,
     });
+    setUserErrors({ ...userError, confirmPasswordError: error });
+  };
+
+  const handleUserCreation = () => {
+    if (isFormValid()) {
+      setShowSuccess(true);
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 3000);
+    }
   };
 
   const isFormValid = () => {
-    return !passwordError && !confirmPasswordError;
+    return (
+      password && confirmPassword && !passwordError && !confirmPasswordError
+    );
   };
-  console.log(userData);
+
   return (
     <View style={styles.container}>
-      <View id="title-container">
-        <Text style={styles.title}>Protegé tu usuario</Text>
-      </View>
-      <View id="input-container" style={styles.inputContainer}>
-        <TextInput
-          style={[styles.input, passwordError && { borderColor: "red" }]}
-          placeholder="Contraseña"
-          value={password}
-          onChangeText={handlePasswordChange}
-        />
-        {passwordError && <Text style={styles.errorText}>{passwordError}</Text>}
-        <TextInput
-          style={[styles.input, confirmPasswordError && { borderColor: "red" }]}
-          placeholder="Confirmar contraseña"
-          value={confirmPassword}
-          onChangeText={handleConfirmPasswordChange}
-        />
-        {confirmPasswordError && (
-          <Text style={styles.errorText}>{confirmPasswordError}</Text>
-        )}
-      </View>
-      <View style={styles.optionContainer}>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={[styles.button, !isFormValid() && { opacity: 0.5 }]}
-            onPress={isFormValid() ? onNext : undefined}
-            disabled={!isFormValid()}
-          >
-            <Text style={styles.buttonText}>Siguiente</Text>
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity onPress={onBack}>
-          <Text style={styles.loginLink}>Volver</Text>
-        </TouchableOpacity>
-      </View>
+      {showSuccess ? (
+        <SuccessMessage type="fade" />
+      ) : (
+        <>
+          <View id="title-container">
+            <Text style={styles.title}>Protegé tu usuario</Text>
+          </View>
+          <View id="input-container" style={styles.inputContainer}>
+            <View style={{ position: "relative", width: "100%" }}>
+              <TextInput
+                style={[styles.input, passwordError && { borderColor: "red" }]}
+                placeholder="Contraseña"
+                value={password}
+                onChangeText={handlePasswordChange}
+                secureTextEntry={!passwordVisible}
+              />
+              <TouchableOpacity
+                style={styles.visibilityToggle}
+                onPress={() => setPasswordVisible(!passwordVisible)}
+              >
+                <Text style={styles.visibilityText}>
+                  {passwordVisible ? "Ocultar" : "Mostrar"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            {passwordError && (
+              <Text style={styles.errorText}>{passwordError}</Text>
+            )}
+            <TextInput
+              style={[
+                styles.input,
+                confirmPasswordError && { borderColor: "red" },
+              ]}
+              placeholder="Confirmar contraseña"
+              value={confirmPassword}
+              onChangeText={handleConfirmPasswordChange}
+              secureTextEntry={!passwordVisible}
+            />
+            {confirmPasswordError && (
+              <Text style={styles.errorText}>{confirmPasswordError}</Text>
+            )}
+          </View>
+          <View style={styles.optionContainer}>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[styles.button, !isFormValid() && { opacity: 0.5 }]}
+                onPress={handleUserCreation}
+                disabled={!isFormValid()}
+              >
+                <Text style={styles.buttonText}>Crear Usuario</Text>
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity onPress={onBack}>
+              <Text style={styles.loginLink}>Volver</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
     </View>
   );
 };

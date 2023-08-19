@@ -5,10 +5,8 @@ import RegistrationPage3 from "./registration3.page";
 
 const RegistrationFlow = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [userData, setUserData] = useState({});
 
-  const handleNextPage = (data) => {
-    setUserData({ ...userData, ...data });
+  const handleNextPage = () => {
     setCurrentPage(currentPage + 1);
   };
 
@@ -22,19 +20,11 @@ const RegistrationFlow = () => {
         return <RegistrationPage1 onNext={handleNextPage} />;
       case 2:
         return (
-          <RegistrationPage2
-            loginData={userData}
-            onNext={handleNextPage}
-            onBack={handlePrevPage}
-          />
+          <RegistrationPage2 onNext={handleNextPage} onBack={handlePrevPage} />
         );
       case 3:
         return (
-          <RegistrationPage3
-            loginData={userData}
-            onNext={handleNextPage}
-            onBack={handlePrevPage}
-          />
+          <RegistrationPage3 onNext={handleNextPage} onBack={handlePrevPage} />
         );
       default:
         return null;
