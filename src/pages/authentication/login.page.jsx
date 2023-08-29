@@ -103,6 +103,11 @@ const LoginPage = () => {
     setUserData({ ...userData, password: text });
   };
 
+  const onPressHandle = () => {
+    setUserData({ username: "", password: "" });
+    navigation.navigate("Register");
+  };
+
   const isFormValid = () => {
     return username && password && !userNameError && !passwordError;
   };
@@ -154,7 +159,7 @@ const LoginPage = () => {
             <Text style={styles.buttonText}>Siguiente</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+        <TouchableOpacity onPress={onPressHandle}>
           <Text style={styles.loginLink}>¿No tienes cuenta? Crea una</Text>
         </TouchableOpacity>
       </View>

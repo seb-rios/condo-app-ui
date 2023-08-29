@@ -115,6 +115,11 @@ const RegistrationPage1 = ({ onNext }) => {
     return phoneRegex.test(phone);
   };
 
+  const onPressHandle = () => {
+    setUserData({ name: "", email: "", phone: "", password: "" });
+    navigation.navigate("Login");
+  };
+
   const isFormValid = () => {
     return name && email && phone && !nameError && !emailError && !phoneError;
   };
@@ -158,7 +163,7 @@ const RegistrationPage1 = ({ onNext }) => {
             <Text style={styles.buttonText}>Siguiente</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+        <TouchableOpacity onPress={onPressHandle}>
           <Text style={styles.loginLink}>¿Ya tienes cuenta?</Text>
         </TouchableOpacity>
       </View>
