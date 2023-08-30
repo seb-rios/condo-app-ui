@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     width: 175,
   },
-  cardText: {
-    color: "#D0D0D0",
+  secondaryCardText: {
+    color: "white",
     fontWeight: "bold",
     padding: 4,
     flexWrap: "wrap",
@@ -71,12 +71,12 @@ const CodeCard = ({ name, id, phone, plate }) => {
       </View>
       <View style={styles.secondaryContainer}>
         <View style={styles.infoContainer}>
-          <Icon name="phone" size={20} color="#D0D0D0" />
-          <Text style={styles.cardText}>{phone}</Text>
+          <Icon name="phone" size={20} color="white" />
+          <Text style={styles.secondaryCardText}>{phone}</Text>
         </View>
         <View style={styles.infoContainer}>
-          <Icon name="car" size={20} color="#D0D0D0" />
-          <Text style={styles.cardText}>{plate}</Text>
+          <Icon name="car" size={20} color="white" />
+          <Text style={styles.secondaryCardText}>{plate}</Text>
         </View>
       </View>
     </View>
