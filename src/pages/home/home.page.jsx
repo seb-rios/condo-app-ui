@@ -11,6 +11,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import HamburgerIcon from "../../components/animations/hamburger-icon.component";
+import GenerateCodeIcon from "../../components/animations/generateCode.component";
 import CodeCard from "../../components/code-card/code-card.component";
 import SideMenu from "../../components/side-menu/side-menu.component";
 
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderTopWidth: 3,
     borderTopColor: "#f0f0f0",
-    padding: 5,
+    padding: 3,
   },
   navItem: {
     alignItems: "center",
@@ -75,9 +76,9 @@ const styles = StyleSheet.create({
     height: 24,
   },
   navText: {
-    marginTop: 5,
+    marginTop: 2,
     color: "#47915A",
-    fontWeight: "400",
+    fontWeight: "300",
     fontSize: 13,
     textAlign: "center",
   },
@@ -140,7 +141,6 @@ const HomePage = () => {
             Buenos días, <Text style={styles.usernameText}>{username}</Text>
           </Text>
           <TouchableOpacity onPress={toggleMenu}>
-            {/* <Icon name="user" size={30} color="#000" /> */}
             <HamburgerIcon ref={hamburgerIconRef} />
           </TouchableOpacity>
         </View>
@@ -229,8 +229,16 @@ const HomePage = () => {
             style={styles.navItem}
             onPress={() => navigation.navigate("CreateCode")}
           >
-            <Icon name="plus-circle" size={30} color="#47915A" />
-            <Text style={styles.navText}>Crear{"\n"}Código</Text>
+            <GenerateCodeIcon />
+            <Text
+              style={{
+                ...styles.navText,
+                fontWeight: "bold",
+                paddingTop: 30,
+              }}
+            >
+              Crear{"\n"}Código
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
